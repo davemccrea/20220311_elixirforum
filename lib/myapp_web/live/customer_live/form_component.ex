@@ -14,18 +14,6 @@ defmodule MyappWeb.CustomerLive.FormComponent do
   end
 
   @impl true
-  def handle_event("click", _, socket) do
-    changeset =
-      socket.assigns.customer
-      |> Customers.change_customer()
-      |> Map.put(:action, nil)
-
-    IO.inspect("clicked")
-
-    {:noreply, socket |> assign(changeset: changeset)}
-  end
-
-  @impl true
   def handle_event("validate", %{"customer" => customer_params}, socket) do
     changeset =
       socket.assigns.customer
