@@ -1,0 +1,41 @@
+<h1>Listing Customers</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <.modal return_to={Routes.customer_index_path(@socket, :index)}>
+    <.live_component
+      module={MyappWeb.CustomerLive.FormComponent}
+      id={@customer.id || :new}
+      title={@page_title}
+      action={@live_action}
+      customer={@customer}
+      return_to={Routes.customer_index_path(@socket, :index)}
+    />
+  </.modal>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email address</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="customers">
+    <%= for customer <- @customers do %>
+      <tr id={"customer-#{customer.id}"}>
+        <td><%= customer.name %></td>
+        <td><%= customer.email_address %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.customer_show_path(@socket, :show, customer) %></span>
+          <span><%= live_patch "Edit", to: Routes.customer_index_path(@socket, :edit, customer) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: customer.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Customer", to: Routes.customer_index_path(@socket, :new) %></span>
